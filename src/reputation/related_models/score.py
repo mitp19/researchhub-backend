@@ -311,7 +311,11 @@ class ScoreChange(DefaultModel):
         raw_value_change,
         content_type,
         object_id,
+        contribution_type='UPVOTE',
     ):
+        from reputation.related_models.contribution_weight import ContributionWeight
+        from django.conf import settings
+        
         algorithm_variables = AlgorithmVariables.objects.filter(hub=score.hub).latest(
             "created_date"
         )
@@ -331,11 +335,20 @@ class ScoreChange(DefaultModel):
             current_variable_counts["votes"] + raw_value_change
         )
 
-        score_value_change = cls.calculate_score_change_votes(
-            score,
-            algorithm_variables,
-            raw_value_change,
-        )
+        # Use tiered scoring if enabled, otherwise fall back to old algorithm
+        if getattr(settings, 'TIERED_SCORING_ENABLED', False):
+            score_value_change = ContributionWeight.calculate_reputation_change(
+                contribution_type
+            )
+            # Apply direction (upvote vs downvote)
+            if raw_value_change < 0:
+                score_value_change = -score_value_change
+        else:
+            score_value_change = cls.calculate_score_change_votes(
+                score,
+                algorithm_variables,
+                raw_value_change,
+            )
 
         current_rep = previous_score + score_value_change
 
@@ -350,6 +363,7 @@ class ScoreChange(DefaultModel):
             changed_object_field="vote_type",
             variable_counts=current_variable_counts,
             score=score,
+            contribution_type=contribution_type,
         )
         score_change.save()
 
