@@ -1,7 +1,5 @@
 """
-Unit tests for ContributionWeight system (Funding-Based).
-
-REVISED: Based on community feedback from Dominikus, Scott, Ruslan, Xavier
+Unit tests for ContributionWeight system
 - Tips use curved scaling (generous, hard to game)
 - Bounties use generous tiers (manually reviewed)
 - Proposals use logarithmic scaling (prevent dominance)
