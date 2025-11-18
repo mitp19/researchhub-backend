@@ -22,6 +22,11 @@ from reputation.models import PaidStatusModelMixin, Withdrawal
 from reputation.views.bounty_view import BountyViewSet
 from reputation.views.deposit_view import DepositViewSet
 from reputation.views.withdrawal_view import WithdrawalViewSet
+from reputation.views.reputation_breakdown_view import (
+    ReputationBreakdownView,
+    ReputationHistoryView,
+    ReputationStatsView,
+)
 from researchhub.settings import APP_ENV, TRANSPOSE_KEY, WEB3_RSC_ADDRESS
 from user.models import User
 from utils.http import GET, POST
