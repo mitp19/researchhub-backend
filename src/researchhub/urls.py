@@ -216,6 +216,22 @@ urlpatterns = [
         "api/rsc/get_rsc_circulating_supply",
         reputation.views.get_rsc_circulating_supply,
     ),
+    # Reputation breakdown endpoints (funding-based reputation system)
+    path(
+        "api/reputation/breakdown/",
+        reputation.views.ReputationBreakdownView.as_view(),
+        name="reputation-breakdown"
+    ),
+    path(
+        "api/reputation/history/",
+        reputation.views.ReputationHistoryView.as_view(),
+        name="reputation-history"
+    ),
+    path(
+        "api/reputation/stats/",
+        reputation.views.ReputationStatsView.as_view(),
+        name="reputation-stats"
+    ),
     path("api/permissions/", researchhub.views.permissions, name="permissions"),
     path("api/search/", include(search.urls)),
     # Referral endpoints
