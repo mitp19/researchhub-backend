@@ -17,6 +17,7 @@ class Score(DefaultModel):
     author = models.ForeignKey("user.Author", on_delete=models.CASCADE, db_index=True)
     hub = models.ForeignKey("hub.Hub", on_delete=models.CASCADE, db_index=True)
     score = models.IntegerField(default=0)
+    score_v2 = models.IntegerField(default=0)
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -186,8 +187,18 @@ class ScoreChange(DefaultModel):
     contribution_type = models.CharField(
         max_length=50,
         default='UPVOTE',
+        help_text='Type of contribution (TIP_RECEIVED, BOUNTY_PAYOUT, UPVOTE, etc.)'
+    )
+    rsc_amount = models.DecimalField(
+        max_digits=19,
+        decimal_places=8,
+        default=0,
+        help_text='Amount of RSC involved in this reputation change (0 for non-RSC contributions)'
+    )
+    is_deleted = models.BooleanField(
+        default=False,
         db_index=True,
-        help_text='Type of contribution that triggered this score change',
+        help_text='Whether the content associated with this score change was deleted',
     )
     
     class Meta:
